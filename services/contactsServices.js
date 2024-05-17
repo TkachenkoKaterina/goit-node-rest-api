@@ -1,16 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
+import Contact from "../models/Contact.js";
 
-const contactsPath = path.resolve("db", "contacts.json");
-
-const updateContact = (contacts) =>
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-export const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  return JSON.parse(data);
-};
+export const listContacts = () => Contact.find();
 
 export const getContactById = async (contactId) => {
   const contacts = await listContacts();
