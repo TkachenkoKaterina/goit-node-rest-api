@@ -5,9 +5,6 @@ import mongoose from "mongoose";
 
 import contactsRouter from "./routes/contactsRouter.js";
 
-const DB_HOST =
-  "mongodb+srv://Mongo_Kate:nS*HTyRxrVx499j@cluster0.woskw61.mongodb.net/db-contacts?retryWrites=true&w=majority&appName=Cluster0";
-
 const app = express();
 
 app.use(morgan("tiny"));
@@ -26,7 +23,7 @@ app.use((err, req, res, next) => {
 });
 
 mongoose
-  .connect(DB_HOST)
+  .connect(process.env.DB_HOST)
   .then(() => {
     console.log("Database connection successful");
     app.listen(3000, () => {

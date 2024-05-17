@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./app.js",
+    "build": "npm install && npm run build",
     "dev": "nodemon ./app.js"
   },
   "dependencies": {
