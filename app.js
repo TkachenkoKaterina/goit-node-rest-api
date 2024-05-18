@@ -6,7 +6,6 @@ import "dotenv/config";
 
 import contactsRouter from "./routes/contactsRouter.js";
 
-// dotenv.config();
 const { DB_HOST, PORT } = process.env;
 
 const app = express();
