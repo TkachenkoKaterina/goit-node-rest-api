@@ -34,6 +34,6 @@ mongoose
     });
   })
   .catch((error) => {
-    console.log(message.error);
+    console.log(error.message);
     process.exit(1);
   });
