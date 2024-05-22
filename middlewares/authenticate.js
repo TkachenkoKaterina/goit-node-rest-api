@@ -3,21 +3,27 @@ import { verifyToken } from "../helpers/jwt.js";
 import { findUser } from "../services/authServices.js";
 
 const authenticate = async (req, res, next) => {
-  const { autorization } = req.headers;
-  if (!autorization) {
+  const { authorization } = req.headers;
+
+  if (!authorization) {
     return next(HttpError(401, "Not authorized"));
   }
 
-  const [baerer, token] = autorization.split(" ");
-  if (baerer !== "Baerer") {
-    return next(HttpError(401, "Not authorized (Baerer not found)"));
+  const [baerer, token] = authorization.split(" ");
+  if (baerer !== "Bearer") {
+    return next(HttpError(401, "Not authorized (Bearer not found)"));
   }
 
   try {
     const { id } = verifyToken(token);
+    console.log("id", id);
     const user = await findUser({ _id: id });
+    console.log("user", user);
     if (!user) {
       return next(HttpError(401, "Not authorized (User not found)"));
+    }
+    if (!user.token) {
+      return next(HttpError(401, "Not authorized (Need to authorize)"));
     }
     req.user = user;
     next();
