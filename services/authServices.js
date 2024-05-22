@@ -7,3 +7,5 @@ export const saveUser = async (data) => {
   const hashResult = await bcrypt.hash(data.password, 10);
   return User.create({ ...data, password: hashResult });
 };
+
+export const updateUser = (filter, data) => User.findOneAndUpdate(filter, data);
