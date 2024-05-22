@@ -1,7 +1,11 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 
-export const findUser = (filter) => User.findOne(filter);
+export const findUser = (filter) => {
+  console.log("filter1", filter);
+  const userQ = User.findOne(filter);
+  return userQ;
+};
 
 export const saveUser = async (data) => {
   const hashResult = await bcrypt.hash(data.password, 10);
