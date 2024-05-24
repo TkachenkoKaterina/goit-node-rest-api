@@ -12,7 +12,6 @@ const getAllContacts = async (req, res) => {
   const filter = { owner };
   const fields = "-createdAt -updatedAt";
   const { page = 1, limit = 20, favorite } = req.query;
-  console.log("req.query", req.query);
   const skip = (page - 1) * limit;
 
   const settingsParams = { skip, limit, favorite };
@@ -41,11 +40,16 @@ const createContact = async (req, res) => {
   const { _id: owner } = req.user;
   const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarsPath, filename);
-  console.log(oldPath);
-  console.log(newPath);
-  // const result = await contactsService.addContact({ ...req.body, owner });
+  await fs.rename(oldPath, newPath);
+  const imgPath = path.join("public", "avatars", filename);
 
-  // res.status(201).json(result);
+  const result = await contactsService.addContact({
+    ...req.body,
+    avatarURL: imgPath,
+    owner,
+  });
+
+  res.status(201).json(result);
 };
 
 const updateContact = async (req, res) => {
