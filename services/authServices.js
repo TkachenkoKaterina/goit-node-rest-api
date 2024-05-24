@@ -2,9 +2,8 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 
 export const findUser = (filter) => {
-  console.log("filter1", filter);
-  const userQ = User.findOne(filter);
-  return userQ;
+  const user = User.findOne(filter);
+  return user;
 };
 
 export const saveUser = async (data) => {
@@ -12,4 +11,5 @@ export const saveUser = async (data) => {
   return User.create({ ...data, password: hashResult });
 };
 
-export const updateUser = (filter, data) => User.findOneAndUpdate(filter, data);
+export const updateUser = (filter, data) =>
+  User.findOneAndUpdate(filter, data, { new: true });
