@@ -2,7 +2,6 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 
 export const findUser = (filter) => {
-  console.log("filter1", filter);
   const userQ = User.findOne(filter);
   return userQ;
 };

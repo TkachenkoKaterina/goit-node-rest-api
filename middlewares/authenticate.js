@@ -16,7 +16,6 @@ const authenticate = async (req, res, next) => {
 
   try {
     const { id } = verifyToken(token);
-    console.log("id", id);
     const user = await findUser({ _id: id });
     console.log("user", user);
     if (!user) {
