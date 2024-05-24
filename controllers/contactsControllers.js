@@ -6,9 +6,11 @@ const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
   const filter = { owner };
   const fields = "-createdAt -updatedAt";
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
+  console.log("req.query", req.query);
   const skip = (page - 1) * limit;
-  const settingsParams = { skip, limit };
+
+  const settingsParams = { skip, limit, favorite };
   const result = await contactsService.listContacts({
     filter,
     fields,

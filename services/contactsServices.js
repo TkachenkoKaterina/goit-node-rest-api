@@ -2,6 +2,12 @@ import Contact from "../models/Contact.js";
 
 export const listContacts = (search = {}) => {
   const { filter = {}, fields = "", settingsParams = {} } = search;
+  const { skip, limit, favorite } = settingsParams;
+
+  if (typeof favorite !== "undefined") {
+    filter.favorite = favorite;
+  }
+
   return Contact.find(filter, fields, settingsParams);
 };
 
