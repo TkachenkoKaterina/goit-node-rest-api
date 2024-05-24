@@ -3,14 +3,14 @@ import { verifyToken } from "../helpers/jwt.js";
 import { findUser } from "../services/authServices.js";
 
 const authenticate = async (req, res, next) => {
-  const { autorization } = req.headers;
-  if (!autorization) {
+  const { authorization } = req.headers;
+  if (!authorization) {
     return next(HttpError(401, "Not authorized"));
   }
 
-  const [baerer, token] = autorization.split(" ");
-  if (baerer !== "Baerer") {
-    return next(HttpError(401, "Not authorized (Baerer not found)"));
+  const [baerer, token] = authorization.split(" ");
+  if (baerer !== "Bearer") {
+    return next(HttpError(401, "Not authorized (Bearer not found)"));
   }
 
   try {
