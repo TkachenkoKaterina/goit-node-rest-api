@@ -9,7 +9,7 @@ const authenticate = async (req, res, next) => {
     return next(HttpError(401, "Not authorized"));
   }
 
-  const [baerer, token] = authorization.split(" ");
+  const [bearer, token] = authorization.split(" ");
   if (baerer !== "Bearer") {
     return next(HttpError(401, "Not authorized (Bearer not found)"));
   }

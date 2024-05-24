@@ -10,6 +10,7 @@ import {
 } from "../schemas/contactsSchemas.js";
 
 import contactsControllers from "../controllers/contactsControllers.js";
+import upload from "../middlewares/upload.js";
 
 const contactsRouter = express.Router();
 
@@ -21,6 +22,7 @@ contactsRouter.get("/:id", isValidId, contactsControllers.getOneContact);
 
 contactsRouter.post(
   "/",
+  upload.single("avatarka"),
   isEmptyBody,
   validateBody(createContactSchema),
   contactsControllers.createContact
