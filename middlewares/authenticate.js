@@ -10,14 +10,13 @@ const authenticate = async (req, res, next) => {
   }
 
   const [bearer, token] = authorization.split(" ");
-  if (baerer !== "Bearer") {
+  if (bearer !== "Bearer") {
     return next(HttpError(401, "Not authorized (Bearer not found)"));
   }
 
   try {
     const { id } = verifyToken(token);
     const user = await findUser({ _id: id });
-    console.log("user", user);
     if (!user) {
       return next(HttpError(401, "Not authorized (User not found)"));
     }
