@@ -7,7 +7,6 @@ const getAllContacts = async (req, res) => {
   const filter = { owner };
   const fields = "-createdAt -updatedAt";
   const { page = 1, limit = 20, favorite } = req.query;
-  console.log("req.query", req.query);
   const skip = (page - 1) * limit;
 
   const settingsParams = { skip, limit, favorite };
