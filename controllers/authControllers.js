@@ -1,22 +1,35 @@
-import * as authServices from "../services/authServices.js";
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
-import HttpError from "../helpers/HttpError.js";
+import fs from "fs/promises";
+import path from "path";
 import bcrypt from "bcrypt";
+import gravatar from "gravatar";
+import Jimp from "jimp";
+
+import * as authServices from "../services/authServices.js";
+
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
+
+import HttpError from "../helpers/HttpError.js";
+
 import { createToken } from "../helpers/jwt.js";
+
+const avatarsPath = path.resolve("public", "avatars");
 
 const register = async (req, res) => {
   const { email } = req.body;
   const user = await authServices.findUser({ email });
+
   if (user) {
     throw HttpError(409, "Email in use");
   }
 
-  const newUser = await authServices.saveUser(req.body);
+  const avatarURL = gravatar.url(email, { protocol: "https" });
+  const newUser = await authServices.saveUser({ ...req.body, avatarURL });
 
   res.status(201).json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -81,10 +94,41 @@ const updateSubscription = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id: userId } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+
+  try {
+    await fs.rename(oldPath, newPath);
+    const image = await Jimp.read(newPath);
+    image.resize(250, 250);
+    await image.writeAsync(newPath);
+
+    const avatarURL = path.join("avatars", filename).replace(/\\/g, "/"); // Ensure the path uses forward slashes
+
+    const updatedUser = await authServices.updateUser(
+      { _id: userId },
+      { avatarURL }
+    );
+
+    if (!updatedUser) {
+      throw HttpError(401, "Not authorized");
+    }
+
+    res.status(200).json({
+      avatarURL: updatedUser.avatarURL,
+    });
+  } catch (error) {
+    throw HttpError(401, "Not authorized");
+  }
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

@@ -22,7 +22,7 @@ contactsRouter.get("/:id", isValidId, contactsControllers.getOneContact);
 
 contactsRouter.post(
   "/",
-  upload.single("avatarURL"),
+  upload.single("avatar"),
   isEmptyBody,
   validateBody(createContactSchema),
   contactsControllers.createContact
