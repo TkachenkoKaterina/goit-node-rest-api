@@ -7,6 +7,7 @@ export const findUser = (filter) => {
 };
 
 export const saveUser = async (data) => {
+  console.log("data :>> ", data);
   const hashResult = await bcrypt.hash(data.password, 10);
   return User.create({ ...data, password: hashResult });
 };
