@@ -23,8 +23,5 @@ export const updateContact = (filter, data) =>
 
 export const removeContact = (filter) => Contact.findOneAndDelete(filter);
 
-export const updateStatusContact = (contactId, body) => {
-  const { favorite } = body;
-  const result = Contact.findByIdAndUpdate(contactId, { favorite });
-  return result;
-};
+export const updateStatusContact = (filter, data) =>
+  Contact.findOneAndUpdate(filter, data, { new: true });
