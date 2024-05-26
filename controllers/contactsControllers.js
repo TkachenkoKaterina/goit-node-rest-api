@@ -51,7 +51,9 @@ const updateContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id: _id } = req.params;
+  console.log("_id :>> ", _id);
   const { _id: owner } = req.user;
+  console.log("owner :>> ", owner);
   const result = await contactsService.removeContact({ _id, owner });
   if (!result) {
     throw HttpError(404, "Not found");
@@ -62,7 +64,11 @@ const deleteContact = async (req, res) => {
 
 const updateFavoriteStatusContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contactsService.updateStatusContact(contactId, req.body);
+  const { _id: owner } = req.user;
+  const result = await contactsService.updateStatusContact(
+    { _id: contactId, owner },
+    req.body
+  );
   if (!result) {
     throw HttpError(404, "Not found");
   }
