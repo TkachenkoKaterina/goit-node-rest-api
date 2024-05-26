@@ -96,6 +96,11 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id: userId } = req.user;
+
+  if (!req.file) {
+    return res.status(400).json({ message: "File is required" });
+  }
+
   const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarsPath, filename);
 
@@ -105,7 +110,7 @@ const updateAvatar = async (req, res) => {
     image.resize(250, 250);
     await image.writeAsync(newPath);
 
-    const avatarURL = path.join("avatars", filename).replace(/\\/g, "/"); // Ensure the path uses forward slashes
+    const avatarURL = path.join("avatars", filename).replace(/\\/g, "/");
 
     const updatedUser = await authServices.updateUser(
       { _id: userId },
