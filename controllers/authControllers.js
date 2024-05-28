@@ -3,6 +3,7 @@ import path from "path";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import Jimp from "jimp";
+import sgMail from "@sendgrid/mail";
 
 import * as authServices from "../services/authServices.js";
 
@@ -11,6 +12,10 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 
 import { createToken } from "../helpers/jwt.js";
+
+const { SENDGRID_API_KEY } = process.env;
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 const avatarsPath = path.resolve("public", "avatars");
 
@@ -25,6 +30,23 @@ const register = async (req, res) => {
   const avatarURL = gravatar.url(email, { protocol: "https" });
   const newUser = await authServices.saveUser({ ...req.body, avatarURL });
 
+  const msg = {
+    to: "tkachenko.city@gmail.com", // Change to your recipient
+    from: "tkachenko_kateryna@meta.ua", // Change to your verified sender
+    subject: "First email by Node.js",
+    text: "and easy to do anywhere, even with Node.js",
+    html: "<H1>Test with Node.js</H1>",
+  };
+
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
   res.status(201).json({
     user: {
       email: newUser.email,
@@ -33,6 +55,8 @@ const register = async (req, res) => {
     },
   });
 };
+
+const verify = (res, req) => {};
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -131,6 +155,7 @@ const updateAvatar = async (req, res) => {
 
 export default {
   register: ctrlWrapper(register),
+  verify: ctrlWrapper(verify),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
