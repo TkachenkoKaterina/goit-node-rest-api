@@ -14,6 +14,10 @@ export const usersLogin = Joi.object({
   token: Joi.string().allow(null),
 });
 
+export const usersEmail = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 export const updateUserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });

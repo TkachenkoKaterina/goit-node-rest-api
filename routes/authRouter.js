@@ -8,6 +8,7 @@ import validateBody from "../decorators/validateBody.js";
 import {
   usersRegister,
   usersLogin,
+  usersEmail,
   updateUserSubscriptionSchema,
 } from "../schemas/authSchema.js";
 
@@ -25,6 +26,12 @@ authRouter.post(
 );
 
 authRouter.get("/verify/:verificationToken", authController.verify);
+
+authRouter.post(
+  "/verify",
+  validateBody(usersEmail),
+  authController.resendVerify
+);
 
 authRouter.post(
   "/login",

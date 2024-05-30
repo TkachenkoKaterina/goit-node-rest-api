@@ -11,5 +11,6 @@ export const saveUser = async (data) => {
   return User.create({ ...data, password: hashResult });
 };
 
-export const updateUser = (filter, data) =>
-  User.findOneAndUpdate(filter, data, { new: true });
+export const updateUser = (filter, data) => {
+  return User.findOneAndUpdate(filter, data, { new: true });
+};
