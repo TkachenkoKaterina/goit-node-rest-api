@@ -25,7 +25,7 @@ const register = async (req, res) => {
   }
 
   const verificationToken = nanoid();
-  const avatarURL = gravatar.url(email, { protocol: "https" });
+  const avatarURL = gravatar.url(email, { protocol: "http" });
 
   const newUser = await authServices.saveUser({
     ...req.body,

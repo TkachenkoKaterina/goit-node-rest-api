@@ -1,6 +1,6 @@
 import sgMail from "@sendgrid/mail";
 
-const { SENDGRID_API_KEY, META_UA_FROM } = process.env;
+const { SENDGRID_API_KEY} = process.env;
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
