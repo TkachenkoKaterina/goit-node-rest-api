@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import fs from "fs/promises";
 import path from "path";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import gravatar from "gravatar";
 import Jimp from "jimp";
 
